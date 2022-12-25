@@ -29,12 +29,17 @@ public class CategoryMapperImpl implements CategoryMapper {
     }
 
     @Override
-    public List<CategoryDto> toDtos(List<Category> t) {
-        return t.stream().map(x -> toDto(x)).collect(Collectors.toList());
+    public List<CategoryDto> toDtos(List<Category> categories) {
+        return categories
+                .stream()
+                .map(x -> toDto(x))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Category> toEntities(List<CategoryDto> categoryDtos) {
-        return categoryDtos.stream().map(x -> toEntity(x)).collect(Collectors.toList());
+        return categoryDtos.stream()
+                .map(x -> toEntity(x))
+                .collect(Collectors.toList());
     }
 }

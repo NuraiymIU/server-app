@@ -1,7 +1,7 @@
 package kg.megacom.serverapp.services.impl;
 
 import kg.megacom.serverapp.dao.CategoryRepo;
-import kg.megacom.serverapp.exceptions.CategoryNotFound;
+import kg.megacom.serverapp.exceptions.ResourceNotFound;
 import kg.megacom.serverapp.mappers.CategoryMapper;
 import kg.megacom.serverapp.models.Category;
 import kg.megacom.serverapp.models.dto.CategoryDto;
@@ -31,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto update(CategoryDto categoryDto) {
         if (!categoryRepo.existsById(categoryDto.getId())) {
-            throw new CategoryNotFound("Категория не найдена!");
+            throw new ResourceNotFound("Категория не найдена!");
         }
         Category category = categoryMapper.toEntity(categoryDto);
         category = categoryRepo.save(category);
@@ -41,14 +41,19 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto findById(Long id) {
-        Category category = categoryRepo.findById(id).orElseThrow(() -> new CategoryNotFound("Категория не найдена!"));
+        Category category = categoryRepo.findById(id).orElseThrow(
+                () -> new ResourceNotFound("Категория не найдена!")
+        );
         return categoryMapper.toDto(category);
     }
 
     @Override
     public List<CategoryDto> findAll() {
         List<Category> subscribers = categoryRepo.findAll();
-        List<CategoryDto> categoryDtos = subscribers.stream().map(x -> categoryMapper.toDto(x)).collect(Collectors.toList());
+        List<CategoryDto> categoryDtos = subscribers
+                .stream()
+                .map(x -> categoryMapper.toDto(x))
+                .collect(Collectors.toList());
         return categoryDtos;
     }
 }
